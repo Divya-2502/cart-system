@@ -10,7 +10,7 @@ body{
 }
 .des_text{
     text-overflow: ellipsis;
-    width: 365px;
+    min-width: 0;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -36,8 +36,6 @@ body{
     color: #fff;
 }
 .detail_page_div{
-    display: flex;
-    gap: 3rem;
     margin-top: 3rem;
 }
 .product_detail_image{
@@ -113,24 +111,20 @@ body{
 }  
 .products_amount{
     width: 100%;
-    display: inline-block;
     margin-top: 3rem;
 }
 #add_tocart_products{
-    width: 50%;
     background-color: #fff;
     border-radius: 15px;
     padding: 15px 0;
-    display: inline-block;
-    float: left;
 }
 #sub_total_total{
-    width: 40%;
+    
+}
+.sub_ttl_inner{
     background-color: #fff;
     border-radius: 15px;
     padding: 15px 20px;
-    display: inline-block;
-    margin-left: 3rem;
 }
 #sub_total_total p span:first-child{
     color: #39a2a0;
@@ -144,4 +138,9 @@ body{
     border-top: 1px solid #ccc;
     padding-top: 10px;
     margin-top: 30px;
+}
+.inner_listing_page h5{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
