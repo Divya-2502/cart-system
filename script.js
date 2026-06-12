@@ -5,6 +5,7 @@ var addtocarproducts;
 var removeButton = document.querySelectorAll(".remove_button");
 var clearButton = document.querySelector(".clear_cart_count");
 var total;
+var cartcount;
 
 fetch("https://dummyjson.com/products")
    .then(res => res.json())
@@ -18,10 +19,10 @@ fetch("https://dummyjson.com/products")
     usersdata.forEach(item => {
         if(mainContent){
             mainContent.innerHTML += `
-            <div class="col-sm-4 listing_products">
+            <div class="col-sm-6 col-md-6 col-lg-4 col listing_products">
                 <div class="inner_listing_page">
                     <div class="thumb_image">
-                      <img src="${item.thumbnail}" alt="${item.title}" onClick = 'productdetail(${item.id})'/>
+                      <img src="${item.thumbnail}" alt="${item.title}" onClick = 'productdetail(${item.id})' class="img-fluid"/>
                     </div>
                     <div>
                         <h5>${item.title}</h5>
@@ -40,11 +41,11 @@ fetch("https://dummyjson.com/products")
         let productdetailsingle = data.products.find(p => p.id == dataId);
             if(productdetailsingle){
                 detailContent.innerHTML = `
-                    <div class="detail_page_div">
-                        <div class="product_detail_image">
-                            <img src="${productdetailsingle.images}" width="650" height="650"/>
+                    <div class="detail_page_div row">
+                        <div class="product_detail_image col-lg-7 col-md-7 col-12">
+                            <img src="${productdetailsingle.images}" width="650" height="650" class="img-fluid"/>
                         </div>
-                        <div>
+                        <div class="col-lg-5 col-md-5 col-12 ps-lg-5 mt-5 mt-md-0">
                             <h2>${productdetailsingle.title}</h2>
                             <h3>$ ${productdetailsingle.price}</h3>
                             <p>${productdetailsingle.warrantyInformation}</p>
@@ -171,15 +172,14 @@ function addtocartfun(){
 
 function cartRender(){
     let carts = JSON.parse(localStorage.getItem("cart_data") || "[]");
-    var cartcount = 0;
     var subtotal = 0;
     carts.forEach((item, index) => {
         addtocarproducts.innerHTML +=   `
-                        <div class="carteachproduct">
-                            <div>
-                                <img src="${item.thumbnail}" />
+                        <div class="carteachproduct row">
+                            <div class="col-sm-6">
+                                <img src="${item.thumbnail}" class="img-fluid"/>
                             </div>
-                            <div class="cart_description">
+                            <div class="cart_description col-sm-6">
                                 <p>${item.title}</p>
                                 <p>$ ${item.price}</p>
                                 <p><span class="decreasecart" onClick="decreasefun(${index})">- </span><span class="productcount">${item.quantity}</span><span onClick="increasefun(${index})" class="increasecart"> +</span></p>
@@ -188,20 +188,20 @@ function cartRender(){
                         </div>
         `
         
-        cartcount += item.quantity;
+        
         subtotal += item.price * item.quantity;
         
     });
     localStorage.setItem("cartCount", cartcount);
     cartcount = localStorage.getItem("cartCount");
     console.log(subtotal);
-
+    updatecartcount();
 // document.querySelectorAll(".cart_count").forEach(el => {
 //     el.textContent = cartcount;
 // });
 document.getElementById("subTotal").textContent = "$" + subtotal.toFixed(2);
 document.getElementById("total").textContent = "$" + (subtotal + 80).toFixed(2);
-document.querySelector(".cart_count").textContent = cartcount;
+
 
 if(cartcount == 0){
     document.querySelector(".empty_cart").classList.remove("d_none");
@@ -224,7 +224,7 @@ function removecart(index){
     // emptycart()
 }
 
-clearButton.addEventListener('click', function(){
+clearButton?.addEventListener('click', function(){
     debugger
     localStorage.removeItem("cart_data");
     addtocarproducts.innerHTML = "";
@@ -232,6 +232,20 @@ clearButton.addEventListener('click', function(){
     document.querySelector(".empty_cart").classList.remove("d_none");
     document.querySelector(".products_amount").classList.add("d_none");
 });
+function updatecartcount(){
+    debugger
+    let carts = JSON.parse(localStorage.getItem("cart_data") || "[]");
+    cartcount = 0;
+    carts.forEach(item => {
+        cartcount += item.quantity;
+    })
+    document.querySelectorAll(".cart_count").forEach(el => {
+        el.textContent = cartcount;
+    });
+}
+
+updatecartcount();
+
 // function emptycart(){
 //     if(document.querySelector(".cart_count").textContent === "0"){
 //         document.querySelector(".empty_cart").classList.add("d_none");
@@ -240,5 +254,7 @@ clearButton.addEventListener('click', function(){
 //         document.querySelector(".empty_cart").classList.remove("d_none");
 //     }
 // }
+
+
 
 
