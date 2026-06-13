@@ -6,18 +6,38 @@ var removeButton = document.querySelectorAll(".remove_button");
 var clearButton = document.querySelector(".clear_cart_count");
 var total;
 var cartcount;
+let mainContent = document.getElementById("Ecommerce_products");
+let skeleton = document.getElementById("skeletonLoading");
 
+if(mainContent){
+    let skeletonHTML = "";
+
+    for (let i = 0; i < 6; i++) {
+        skeletonHTML += `
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <div class="inner_listing_page skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                    <div class="skeleton-text price"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    skeleton.innerHTML = skeletonHTML;
+}
 fetch("https://dummyjson.com/products")
    .then(res => res.json())
    .then(data =>{
 
-    let mainContent = document.getElementById("Ecommerce_products");
+    
     let detailContent = document.getElementById("detail_product");
     addtocarproducts = document.getElementById("add_tocart_products");
     usersdata = data.products;
-
-    usersdata.forEach(item => {
-        if(mainContent){
+    if(mainContent){
+       mainContent.innerHTML = "";
+        usersdata.forEach(item => {
             mainContent.innerHTML += `
             <div class="col-sm-6 col-md-6 col-lg-4 col listing_products">
                 <div class="inner_listing_page">
@@ -31,8 +51,15 @@ fetch("https://dummyjson.com/products")
                     </div>
                 </div>
             </div>`
-        }
-    });
+        
+         });
+        setTimeout(() => {
+            skeleton.classList.add("d_none");
+            mainContent.classList.remove("d_none");
+        }, 3000);
+        
+        
+    }
     
     
     if(detailContent){
@@ -231,6 +258,7 @@ clearButton?.addEventListener('click', function(){
     document.querySelector(".cart_count").textContent = 0;
     document.querySelector(".empty_cart").classList.remove("d_none");
     document.querySelector(".products_amount").classList.add("d_none");
+    updatecartcount();
 });
 function updatecartcount(){
     debugger
@@ -242,6 +270,12 @@ function updatecartcount(){
     document.querySelectorAll(".cart_count").forEach(el => {
         el.textContent = cartcount;
     });
+    if(!cartcount){
+        clearButton.classList.add("d_none");
+    }
+    else{
+        clearButton.classList.remove("d_none");
+    }
 }
 
 updatecartcount();
